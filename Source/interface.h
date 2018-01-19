@@ -2,6 +2,8 @@
 #define INTERFACE_H
 
 #include <QMainWindow>
+#include <QGridLayout>
+#include "buttons.h"
 
 class Interface : public QMainWindow
 {
@@ -13,8 +15,12 @@ public:
 
 private:
     QWidget *basicLayout;
+    QGridLayout *btnGLayout;
+
+    QVector<Buttons*> Btns;
 
     void setLayout();
+    void setButtons(int, int, int);
 };
 
 #endif // INTERFACE_H
