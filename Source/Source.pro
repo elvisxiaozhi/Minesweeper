@@ -26,8 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         interface.cpp \
-    buttons.cpp
+    buttons.cpp \
+    labels.cpp
 
 HEADERS += \
         interface.h \
-    buttons.h
+    buttons.h \
+    labels.h

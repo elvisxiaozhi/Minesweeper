@@ -16,11 +16,17 @@ public:
 private:
     QWidget *basicLayout;
     QGridLayout *btnGLayout;
+    QPushButton *btnSender;
+    QString btnObjectName;
 
     QVector<Buttons*> Btns;
 
     void setLayout();
     void setButtons(int, int, int);
+    void getBtnInfo();
+
+private slots:
+    void markFlag();
 };
 
 #endif // INTERFACE_H
