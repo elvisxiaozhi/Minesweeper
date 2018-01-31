@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGridLayout>
 #include "buttons.h"
+#include "labels.h"
 
 class Interface : public QMainWindow
 {
@@ -23,12 +24,16 @@ private:
     QVector<int> flagsPos;
     QVector<int> questionMarkPos;
 
+    Labels Lbls;
+
     void setLayout();
     void setButtons(int, int, int);
+    void setLabels(int, int, int);
     void getBtnInfo();
 
 private slots:
     void markFlag();
+    void showLabel();
 };
 
 #endif // INTERFACE_H
