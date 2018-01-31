@@ -57,13 +57,21 @@ void Interface::markFlag()
     for(int i = 0; i < Btns.size(); i++) {
         if(Btns[i]->objectName() == btnObjectName) {
             if(std::find(flagsPos.begin(), flagsPos.end(), i) != flagsPos.end()) {
-
+                flagsPos.erase(std::remove(flagsPos.begin(), flagsPos.end(), i), flagsPos.end());
+                questionMarkPos.push_back(i);
+                Btns[i]->setIcon(QIcon(":/question_mark.png"));
+                Btns[i]->setIconSize(QSize(40, 40));
             }
             else {
-                Btns[i]->setIcon(QIcon("://flag.ico"));
-                Btns[i]->setIconSize(QSize(40, 40));
-                Btns[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                flagsPos.push_back(i);
+                if(std::find(questionMarkPos.begin(), questionMarkPos.end(), i) != questionMarkPos.end()) {
+                    questionMarkPos.erase(std::remove(questionMarkPos.begin(), questionMarkPos.end(), i), questionMarkPos.end());
+                    Btns[i]->setIcon(QIcon());
+                }
+                else {
+                    Btns[i]->setIcon(QIcon("://flag.ico"));
+                    Btns[i]->setIconSize(QSize(40, 40));
+                    flagsPos.push_back(i);
+                }
             }
         }
     }

@@ -21,6 +21,7 @@ private:
 
     QVector<Buttons*> Btns;
     QVector<int> flagsPos;
+    QVector<int> questionMarkPos;
 
     void setLayout();
     void setButtons(int, int, int);
