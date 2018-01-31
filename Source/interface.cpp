@@ -35,7 +35,7 @@ void Interface::setButtons(int totalBtns, int rows, int cols)
         for(int j = 0; j < cols; j++) {
             Btns[i * cols + j] = new Buttons();
             Btns[i * cols + j]->setObjectName(QString::number(i * cols + j));
-            Btns[i * cols + j]->setMinimumSize(40, 40);
+            Btns[i * cols + j]->setMinimumSize(50, 50);
             Btns[i * cols + j]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             btnGLayout->addWidget(Btns[i * cols + j], i, j);
             connect(Btns[i * cols + j], &Buttons::btnRightClicked, this, &Interface::markFlag);
@@ -54,4 +54,17 @@ void Interface::markFlag()
 {
     qDebug() << "Right Clicked";
     getBtnInfo();
+    for(int i = 0; i < Btns.size(); i++) {
+        if(Btns[i]->objectName() == btnObjectName) {
+            if(std::find(flagsPos.begin(), flagsPos.end(), i) != flagsPos.end()) {
+
+            }
+            else {
+                Btns[i]->setIcon(QIcon("://flag.ico"));
+                Btns[i]->setIconSize(QSize(40, 40));
+                Btns[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                flagsPos.push_back(i);
+            }
+        }
+    }
 }

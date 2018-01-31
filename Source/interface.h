@@ -20,6 +20,7 @@ private:
     QString btnObjectName;
 
     QVector<Buttons*> Btns;
+    QVector<int> flagsPos;
 
     void setLayout();
     void setButtons(int, int, int);

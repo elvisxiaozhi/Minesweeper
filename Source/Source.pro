@@ -33,3 +33,8 @@ HEADERS += \
         interface.h \
     buttons.h \
     labels.h
+
+RC_ICONS = windowIcon.ico
+
+RESOURCES += \
+    ../Icons/icons.qrc
