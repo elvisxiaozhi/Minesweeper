@@ -21,6 +21,8 @@ void Interface::setLayout()
 
     setButtons(81, 9, 9);
     setLabels(81, 9, 9);
+    Lbls.setMineIcon(10, 81);
+    Lbls.setLblsStyleSheet(81);
 
     basicLayout->setLayout(btnGLayout);
 }
@@ -99,8 +101,13 @@ void Interface::showLabel()
     getBtnInfo();
     for(int i = 0; i < Btns.size(); i++) {
         if(Btns[i]->objectName() == btnObjectName) {
-            Btns[i]->hide();
-            Lbls.labels[i]->show();
+            if(std::find(flagsPos.begin(), flagsPos.end(), i) != flagsPos.end() || std::find(questionMarkPos.begin(), questionMarkPos.end(), i) != questionMarkPos.end()) {
+                qDebug() << "Can not show label right now";
+            }
+            else {
+                Btns[i]->hide();
+                Lbls.labels[i]->show();
+            }
         }
     }
 }
