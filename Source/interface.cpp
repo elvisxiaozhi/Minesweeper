@@ -5,13 +5,8 @@ Interface::Interface(QWidget *parent)
     : QMainWindow(parent)
 {
     setLayout();
-    setButtons(81, 9, 9);
-    setLabels(81, 9, 9);
-    Lbls.generatedMines.generateMines(10, 81);
-    Lbls.setLblNotation(81, 9, 9);
-    Lbls.setMineIcon();
-    Lbls.setLblsStyleSheet(81);
-    setBottomBar();
+    startGame();
+    connect(&setMsBox, &MessagesBoxes::playAgain, this, &Interface::resetGame);
 }
 
 Interface::~Interface()
@@ -35,8 +30,22 @@ void Interface::setLayout()
     vLayout->addLayout(btnGLayout);
 }
 
+void Interface::startGame()
+{
+    setButtons(81, 9, 9);
+    setLabels(81, 9, 9);
+    Lbls.generatedMines.generateMines(10, 81);
+    Lbls.setLblNotation(81, 9, 9);
+    Lbls.setMineIcon();
+    Lbls.setLblsStyleSheet(81);
+    setBottomBar();
+}
+
 void Interface::setButtons(int totalBtns, int rows, int cols)
 {
+    totalRows = rows, totalCols = cols;
+    qDebug() << "rows: " << totalRows << "cols: " << totalCols;
+
     Btns.resize(totalBtns);
 
     for(int i = 0; i < rows; i++) {
@@ -125,6 +134,141 @@ void Interface::showLabel()
             else {
                 Btns[i]->hide();
                 Lbls.labels[i]->show();
+                if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), i) != Lbls.generatedMines.minesPos.end()) {
+                    showAll();
+                    Lbls.labels[i]->setStyleSheet("background-color: red");
+                }
+                else if(Lbls.labels[i]->pixmap() == 0) {
+                    QString clickedLblObjectName = Lbls.labels[i]->objectName();
+                    showTopBlankLbls(clickedLblObjectName);
+                    showBottomBlankLbls(clickedLblObjectName);
+                    showLeftBlankLbls(clickedLblObjectName);
+                    showRightBlankLbls(clickedLblObjectName);
+                }
+            }
+        }
+    }
+}
+
+void Interface::resetGame()
+{
+    flagsPos.clear();
+    questionMarkPos.clear();
+    for(int i = 0; i < Btns.size(); i++) {
+        delete Btns[i];
+        delete Lbls.labels[i];
+    }
+    delete setTimer.timerLbl;
+    delete setTimer.minesLbl;
+    delete setTimer.startTimer;
+    startGame();
+}
+
+void Interface::showAll()
+{
+    for(int i = 0; i < Btns.size(); i++) {
+        Btns[i]->hide();
+        Lbls.labels[i]->show();
+    }
+    setTimer.startTimer->stop();
+    setMsBox.showPlayAgainMsBox();
+}
+
+void Interface::showTopBlankLbls(QString clickedLblObjectName)
+{
+    for(int i = 0; i < totalRows; i++) {
+        for(int j = 0; j < totalCols; j++) {
+            if(Lbls.labels[i * totalCols + j]->objectName() == clickedLblObjectName) {
+                if(Lbls.labels[i * totalCols + j]->text() == "" && i * totalCols + j - totalCols >= 0) { //如果点击的位置为空白，且该位置不在第一行
+                    if(Lbls.labels[i * totalCols +  j - totalCols]->text() == "" && Lbls.labels[i * totalCols +  j - totalCols]->pixmap() == 0) { //如果上面一个位置为空白，且不是雷
+                        Lbls.labels[i * totalCols +  j - totalCols]->show();
+                        Btns[i * totalCols + j - totalCols]->hide();
+                        QString lblObjectName = Lbls.labels[i * totalCols +  j - totalCols]->objectName(); //对它上面一个位置进行递归所需要的传入参数
+                        showTopBlankLbls(lblObjectName);
+                        showLeftBlankLbls(lblObjectName);
+                        showRightBlankLbls(lblObjectName);
+//                        hiddenBtns.push_back(i * totalCols + j - totalCols);
+                    }
+                    else if(Lbls.labels[i * totalCols +  j - totalCols]->text() != "" && Lbls.labels[i * totalCols +  j - totalCols]->pixmap() == 0) {
+                        Lbls.labels[i * totalCols +  j - totalCols]->show();
+                        Btns[i * totalCols + j - totalCols]->hide();
+//                        hiddenBtns.push_back(i * totalCols + j - totalCols);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interface::showBottomBlankLbls(QString clickedLblObjectName)
+{
+    for(int i = 0; i < totalRows; i++) {
+        for(int j = 0; j < totalCols; j++) {
+            if(Lbls.labels[i * totalCols + j]->objectName() == clickedLblObjectName) {
+                if(Lbls.labels[i * totalCols + j]->text() == "" && i * totalCols + j + totalCols < totalCols * totalRows) { //如果点击的位置为空白，且该位置不在最后一行
+                    if(Lbls.labels[i * totalCols +  j + totalCols]->text() == "" && Lbls.labels[i * totalCols +  j + totalCols]->pixmap() == 0) { //如果上面一个位置为空白，且不是雷
+                        Lbls.labels[i * totalCols +  j + totalCols]->show();
+                        Btns[i * totalCols + j + totalCols]->hide();
+                        QString lblObjectName = Lbls.labels[i * totalCols +  j + totalCols]->objectName(); //对它上面一个位置进行递归所需要的传入参数
+                        showBottomBlankLbls(lblObjectName);
+                        showLeftBlankLbls(lblObjectName);
+                        showRightBlankLbls(lblObjectName);
+//                        hiddenBtns.push_back(i * totalCols + j + totalCols);
+                    }
+                    else if(Lbls.labels[i * totalCols +  j + totalCols]->text() != "" && Lbls.labels[i * totalCols +  j + totalCols]->pixmap() == 0) {
+                        Lbls.labels[i * totalCols +  j + totalCols]->show();
+                        Btns[i * totalCols + j + totalCols]->hide();
+//                        hiddenBtns.push_back(i * totalCols + j + totalCols);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interface::showLeftBlankLbls(QString clickedLblObjectName)
+{
+    for(int i = 0; i < totalRows; i++) {
+        for(int j = 0; j < totalCols; j++) {
+            if(Lbls.labels[i * totalCols + j]->objectName() == clickedLblObjectName) {
+                if(Lbls.labels[i * totalCols + j]->text() == "" && (i * totalCols + j + totalCols) % totalCols != 0) { //如果点击的位置为空白，且该位置不在最后一行
+                    if(Lbls.labels[i * totalCols +  j - 1]->text() == "" && Lbls.labels[i * totalCols +  j - 1]->pixmap() == 0) { //如果上面一个位置为空白，且不是雷
+                        Lbls.labels[i * totalCols +  j - 1]->show();
+                        Btns[i * totalCols + j - 1]->hide();
+                        QString lblObjectName = Lbls.labels[i * totalCols +  j - 1]->objectName(); //对它上面一个位置进行递归所需要的传入参数
+                        showLeftBlankLbls(lblObjectName);
+//                        hiddenBtns.push_back(i * totalCols + j - 1);
+                    }
+                    else if(Lbls.labels[i * totalCols +  j - 1]->text() != "" && Lbls.labels[i * totalCols +  j - 1]->pixmap() == 0) {
+                        Lbls.labels[i * totalCols +  j - 1]->show();
+                        Btns[i * totalCols + j - 1]->hide();
+//                        hiddenBtns.push_back(i * totalCols + j - 1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interface::showRightBlankLbls(QString clickedLblObjectName)
+{
+    for(int i = 0; i < totalRows; i++) {
+        for(int j = 0; j < totalCols; j++) {
+            if(Lbls.labels[i * totalCols + j]->objectName() == clickedLblObjectName) {
+                if(Lbls.labels[i * totalCols + j]->text() == "" && (i * totalCols + j + totalCols) % totalCols != totalCols - 1) { //如果点击的位置为空白，且该位置不在最后一行
+                    if(Lbls.labels[i * totalCols +  j + 1]->text() == "" && Lbls.labels[i * totalCols +  j + 1]->pixmap() == 0) { //如果上面一个位置为空白，且不是雷
+                        Lbls.labels[i * totalCols +  j + 1]->show();
+                        Btns[i * totalCols + j + 1]->hide();
+                        QString lblObjectName = Lbls.labels[i * totalCols +  j + 1]->objectName(); //对它上面一个位置进行递归所需要的传入参数
+                        showRightBlankLbls(lblObjectName);
+//                        hiddenBtns.push_back(i * totalCols + j + 1);
+                    }
+                    else if(Lbls.labels[i * totalCols +  j + 1]->text() != "" && Lbls.labels[i * totalCols +  j + 1]->pixmap() == 0) {
+                        Lbls.labels[i * totalCols +  j + 1]->show();
+                        Btns[i * totalCols + j + 1]->hide();
+//                        hiddenBtns.push_back(i * totalCols + j + 1);
+                    }
+                }
             }
         }
     }

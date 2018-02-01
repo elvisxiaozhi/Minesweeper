@@ -8,6 +8,7 @@
 #include "buttons.h"
 #include "labels.h"
 #include "timer.h"
+#include "messagesboxes.h"
 
 class Interface : public QMainWindow
 {
@@ -31,16 +32,26 @@ private:
 
     Labels Lbls;
     Timer setTimer;
+    MessagesBoxes setMsBox;
+
+    int totalRows, totalCols;
 
     void setLayout();
+    void startGame();
     void setButtons(int, int, int);
     void setLabels(int, int, int);
     void setBottomBar();
     void getBtnInfo();
+    void showAll();
+    void showTopBlankLbls(QString);
+    void showBottomBlankLbls(QString);
+    void showLeftBlankLbls(QString);
+    void showRightBlankLbls(QString);
 
 private slots:
     void markFlag();
     void showLabel();
+    void resetGame();
 };
 
 #endif // INTERFACE_H
