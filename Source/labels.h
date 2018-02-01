@@ -12,8 +12,9 @@ public:
     QVector<QLabel*> labels;
     Mines generatedMines;
 
-    void setMineIcon(int, int);
+    void setMineIcon();
     void setLblsStyleSheet(int);
+    void setLblNotation(int, int, int);
 };
 
 #endif // LABELS_H

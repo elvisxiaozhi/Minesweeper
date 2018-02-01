@@ -21,7 +21,9 @@ void Interface::setLayout()
 
     setButtons(81, 9, 9);
     setLabels(81, 9, 9);
-    Lbls.setMineIcon(10, 81);
+    Lbls.generatedMines.generateMines(10, 81);
+    Lbls.setLblNotation(81, 9, 9);
+    Lbls.setMineIcon();
     Lbls.setLblsStyleSheet(81);
 
     basicLayout->setLayout(btnGLayout);
