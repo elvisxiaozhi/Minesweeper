@@ -5,6 +5,13 @@ Interface::Interface(QWidget *parent)
     : QMainWindow(parent)
 {
     setLayout();
+    setButtons(81, 9, 9);
+    setLabels(81, 9, 9);
+    Lbls.generatedMines.generateMines(10, 81);
+    Lbls.setLblNotation(81, 9, 9);
+    Lbls.setMineIcon();
+    Lbls.setLblsStyleSheet(81);
+    setBottomBar();
 }
 
 Interface::~Interface()
@@ -19,21 +26,17 @@ void Interface::setLayout()
     basicLayout = new QWidget(this);
     setCentralWidget(basicLayout);
 
-    setButtons(81, 9, 9);
-    setLabels(81, 9, 9);
-    Lbls.generatedMines.generateMines(10, 81);
-    Lbls.setLblNotation(81, 9, 9);
-    Lbls.setMineIcon();
-    Lbls.setLblsStyleSheet(81);
+    btnGLayout = new QGridLayout;
+    btnGLayout->setSpacing(0);
 
-    basicLayout->setLayout(btnGLayout);
+    vLayout = new QVBoxLayout;
+    basicLayout->setLayout(vLayout);
+
+    vLayout->addLayout(btnGLayout);
 }
 
 void Interface::setButtons(int totalBtns, int rows, int cols)
 {
-    btnGLayout = new QGridLayout(basicLayout);
-    btnGLayout->setSpacing(0);
-
     Btns.resize(totalBtns);
 
     for(int i = 0; i < rows; i++) {
@@ -63,6 +66,19 @@ void Interface::setLabels(int totalLbls, int rows, int cols)
             Lbls.labels[i * cols + j]->hide();
         }
     }
+}
+
+void Interface::setBottomBar()
+{
+    setTimer.setBottomBar(Lbls.generatedMines.minesPos.size(), basicLayout);
+    setTimer.setTimer();
+    hLayout = new QHBoxLayout;
+//    hLayout->addWidget(setTimer.timerIconLbl);
+    hLayout->addWidget(setTimer.timerLbl);
+    hLayout->addWidget(setTimer.minesLbl);
+//    hLayout->addWidget(setTimer.minesIconLbl);
+
+    vLayout->addLayout(hLayout);
 }
 
 void Interface::getBtnInfo()

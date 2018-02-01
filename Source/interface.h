@@ -3,8 +3,11 @@
 
 #include <QMainWindow>
 #include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "buttons.h"
 #include "labels.h"
+#include "timer.h"
 
 class Interface : public QMainWindow
 {
@@ -17,6 +20,8 @@ public:
 private:
     QWidget *basicLayout;
     QGridLayout *btnGLayout;
+    QVBoxLayout *vLayout;
+    QHBoxLayout *hLayout;
     QPushButton *btnSender;
     QString btnObjectName;
 
@@ -25,10 +30,12 @@ private:
     QVector<int> questionMarkPos;
 
     Labels Lbls;
+    Timer setTimer;
 
     void setLayout();
     void setButtons(int, int, int);
     void setLabels(int, int, int);
+    void setBottomBar();
     void getBtnInfo();
 
 private slots:

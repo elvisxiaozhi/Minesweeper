@@ -28,13 +28,15 @@ SOURCES += \
         interface.cpp \
     buttons.cpp \
     labels.cpp \
-    mines.cpp
+    mines.cpp \
+    timer.cpp
 
 HEADERS += \
         interface.h \
     buttons.h \
     labels.h \
-    mines.h
+    mines.h \
+    timer.h
 
 RC_ICONS = windowIcon.ico
 

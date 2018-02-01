@@ -3,5 +3,6 @@
         <file>flag.ico</file>
         <file>question_mark.png</file>
         <file>mine.ico</file>
+        <file>timerLbl.ico</file>
     </qresource>
 </RCC>
