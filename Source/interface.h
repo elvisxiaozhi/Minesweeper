@@ -24,22 +24,18 @@ private:
     QVBoxLayout *vLayout;
     QHBoxLayout *hLayout;
     QPushButton *btnSender;
-
     QString btnObjectName;
-
     QVector<Buttons*> Btns;
     QVector<int> flagsPos;
     QVector<int> questionMarkPos;
-
     Labels Lbls;
     Timer setTimer;
     MessagesBoxes setMsBox;
-
     int totalRows, totalCols;
 
     void setLayout();
     void setMenuBar();
-    void startGame();
+    void startGame(int, int, int);
     void setButtons(int, int, int);
     void setLabels(int, int, int);
     void setBottomBar();
@@ -50,11 +46,15 @@ private:
     void showLeftBlankLbls(QString);
     void showRightBlankLbls(QString);
     void recoverMarkedBtns();
+    void resetGame();
 
 private slots:
     void markFlag();
     void showLabel();
-    void resetGame();
+    void playAgain();
+    void easyMode();
+    void mediumMode();
+    void hardMode();
 };
 
 #endif // INTERFACE_H

@@ -8,8 +8,8 @@ Interface::Interface(QWidget *parent)
 {
     setLayout();
     setMenuBar();
-    startGame();
-    connect(&setMsBox, &MessagesBoxes::playAgain, this, &Interface::resetGame);
+    startGame(8, 8, 10);
+    connect(&setMsBox, &MessagesBoxes::playAgain, this, &Interface::playAgain);
 }
 
 Interface::~Interface()
@@ -39,18 +39,26 @@ void Interface::setMenuBar()
     levelMenu = menuBar()->addMenu("Level");
     QAction *easyAction = new QAction;
     easyAction->setText("Easy");
-    connect(easyAction, &QAction::triggered, this, &Interface::resetGame);
+    QAction *mediumAction = new QAction;
+    mediumAction->setText("Medium");
+    QAction *hardAction = new QAction;
+    hardAction->setText("Hard");
     levelMenu->addAction(easyAction);
+    levelMenu->addAction(mediumAction);
+    levelMenu->addAction(hardAction);
+    connect(easyAction, &QAction::triggered, this, &Interface::easyMode);
+    connect(mediumAction, &QAction::triggered, this, &Interface::mediumMode);
+    connect(hardAction, &QAction::triggered, this, &Interface::hardMode);
 }
 
-void Interface::startGame()
+void Interface::startGame(int rows, int cols, int totalMines)
 {
-    setButtons(81, 9, 9);
-    setLabels(81, 9, 9);
-    Lbls.generatedMines.generateMines(10, 81);
-    Lbls.setLblNotation(81, 9, 9);
+    setButtons(rows * cols, rows, cols);
+    setLabels(rows * cols, rows, cols);
+    Lbls.generatedMines.generateMines(totalMines, rows * cols);
+    Lbls.setLblNotation(rows * cols, rows, cols);
     Lbls.setMineIcon();
-    Lbls.setLblsStyleSheet(81);
+    Lbls.setLblsStyleSheet(rows * cols);
     setBottomBar();
 }
 
@@ -164,6 +172,37 @@ void Interface::showLabel()
     }
 }
 
+void Interface::playAgain()
+{
+    if(totalCols == 8) {
+        easyMode();
+    }
+    else if(totalCols == 16) {
+        mediumMode();
+    }
+    else {
+        hardMode();
+    }
+}
+
+void Interface::easyMode()
+{
+    resetGame();
+    startGame(8, 8, 10);
+}
+
+void Interface::mediumMode()
+{
+    resetGame();
+    startGame(16, 16, 40);
+}
+
+void Interface::hardMode()
+{
+    resetGame();
+    startGame(16, 30, 99);
+}
+
 void Interface::resetGame()
 {
     flagsPos.clear();
@@ -175,7 +214,6 @@ void Interface::resetGame()
     delete setTimer.timerLbl;
     delete setTimer.minesLbl;
     delete setTimer.startTimer;
-    startGame();
 }
 
 void Interface::showAll()
