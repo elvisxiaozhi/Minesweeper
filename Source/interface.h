@@ -24,6 +24,7 @@ private:
     QVBoxLayout *vLayout;
     QHBoxLayout *hLayout;
     QPushButton *btnSender;
+
     QString btnObjectName;
 
     QVector<Buttons*> Btns;
@@ -37,6 +38,7 @@ private:
     int totalRows, totalCols;
 
     void setLayout();
+    void setMenuBar();
     void startGame();
     void setButtons(int, int, int);
     void setLabels(int, int, int);
@@ -47,6 +49,7 @@ private:
     void showBottomBlankLbls(QString);
     void showLeftBlankLbls(QString);
     void showRightBlankLbls(QString);
+    void recoverMarkedBtns();
 
 private slots:
     void markFlag();

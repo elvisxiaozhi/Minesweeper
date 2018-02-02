@@ -1,10 +1,13 @@
 #include "interface.h"
 #include <QDebug>
+#include <QMenu>
+#include <QMenuBar>
 
 Interface::Interface(QWidget *parent)
     : QMainWindow(parent)
 {
     setLayout();
+    setMenuBar();
     startGame();
     connect(&setMsBox, &MessagesBoxes::playAgain, this, &Interface::resetGame);
 }
@@ -28,6 +31,16 @@ void Interface::setLayout()
     basicLayout->setLayout(vLayout);
 
     vLayout->addLayout(btnGLayout);
+}
+
+void Interface::setMenuBar()
+{
+    QMenu *levelMenu = new QMenu(basicLayout);
+    levelMenu = menuBar()->addMenu("Level");
+    QAction *easyAction = new QAction;
+    easyAction->setText("Easy");
+    connect(easyAction, &QAction::triggered, this, &Interface::resetGame);
+    levelMenu->addAction(easyAction);
 }
 
 void Interface::startGame()
@@ -135,8 +148,8 @@ void Interface::showLabel()
                 Btns[i]->hide();
                 Lbls.labels[i]->show();
                 if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), i) != Lbls.generatedMines.minesPos.end()) {
-                    showAll();
                     Lbls.labels[i]->setStyleSheet("background-color: red");
+                    showAll();
                 }
                 else if(Lbls.labels[i]->pixmap() == 0) {
                     QString clickedLblObjectName = Lbls.labels[i]->objectName();
@@ -144,6 +157,7 @@ void Interface::showLabel()
                     showBottomBlankLbls(clickedLblObjectName);
                     showLeftBlankLbls(clickedLblObjectName);
                     showRightBlankLbls(clickedLblObjectName);
+                    recoverMarkedBtns();
                 }
             }
         }
@@ -270,6 +284,27 @@ void Interface::showRightBlankLbls(QString clickedLblObjectName)
                     }
                 }
             }
+        }
+    }
+}
+
+void Interface::recoverMarkedBtns()
+{
+    if(flagsPos.size() > 0) {
+        for(int i = 0; i < flagsPos.size(); i++) {
+            Btns[flagsPos[i]]->setIcon(QIcon("://flag.ico"));
+            Btns[flagsPos[i]]->setIconSize(QSize(40, 40));
+            Btns[flagsPos[i]]->show();
+            Lbls.labels[flagsPos[i]]->hide();
+        }
+    }
+
+    if(questionMarkPos.size() > 0) {
+        for(int i = 0; i < questionMarkPos.size(); i++) {
+            Btns[questionMarkPos[i]]->setIcon(QIcon(":/question_mark.png"));
+            Btns[questionMarkPos[i]]->setIconSize(QSize(40, 40));
+            Btns[questionMarkPos[i]]->show();
+            Lbls.labels[questionMarkPos[i]]->hide();
         }
     }
 }
