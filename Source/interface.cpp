@@ -142,6 +142,9 @@ void Interface::markFlag()
             }
         }
     }
+    connect(this, &Interface::flagMarked, this, &Interface::setRemainingMines);
+    emit flagMarked();
+    checkWin();
 }
 
 void Interface::showLabel()
@@ -170,6 +173,7 @@ void Interface::showLabel()
             }
         }
     }
+    checkWin();
 }
 
 void Interface::playAgain()
@@ -203,6 +207,11 @@ void Interface::hardMode()
     startGame(16, 30, 99);
 }
 
+void Interface::setRemainingMines()
+{
+    setTimer.minesLbl->setText(QString::number(Lbls.generatedMines.minesPos.size() - flagsPos.size()));
+}
+
 void Interface::resetGame()
 {
     flagsPos.clear();
@@ -216,8 +225,33 @@ void Interface::resetGame()
     delete setTimer.startTimer;
 }
 
+void Interface::checkWin()
+{
+    if(flagsPos.size() == Lbls.generatedMines.minesPos.size() && questionMarkPos.size() == 0) {
+        int showedLabel = 0;
+        for(int i = 0; i < Lbls.labels.size(); i++) {
+            if(Lbls.labels[i]->isVisible()) {
+                showedLabel++;
+            }
+        }
+        qDebug() << "Showed labels: " << showedLabel;
+        if(totalRows * totalCols - showedLabel == Lbls.generatedMines.minesPos.size()) {
+            std::sort(flagsPos.begin(), flagsPos.end());
+            std::sort(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end());
+            if(std::equal(flagsPos.begin(), flagsPos.end(), Lbls.generatedMines.minesPos.begin())) {
+                setTimer.startTimer->stop();
+                setMsBox.playAgainMsBox.setWindowTitle("You Won");
+                connect(this, &Interface::gameWon, &setMsBox, &MessagesBoxes::showPlayAgainMsBox);
+                emit gameWon();
+                qDebug() << "You won";
+            }
+        }
+    }
+}
+
 void Interface::showAll()
 {
+    setMsBox.playAgainMsBox.setWindowTitle("Game Over");;
     for(int i = 0; i < Btns.size(); i++) {
         Btns[i]->hide();
         Lbls.labels[i]->show();

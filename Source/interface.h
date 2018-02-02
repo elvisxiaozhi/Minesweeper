@@ -47,6 +47,11 @@ private:
     void showRightBlankLbls(QString);
     void recoverMarkedBtns();
     void resetGame();
+    void checkWin();
+
+signals:
+    void flagMarked();
+    void gameWon();
 
 private slots:
     void markFlag();
@@ -55,6 +60,7 @@ private slots:
     void easyMode();
     void mediumMode();
     void hardMode();
+    void setRemainingMines();
 };
 
 #endif // INTERFACE_H

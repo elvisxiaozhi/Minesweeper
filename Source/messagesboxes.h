@@ -9,6 +9,7 @@ class MessagesBoxes : public QObject
 public:
     MessagesBoxes();
     void showPlayAgainMsBox();
+    QMessageBox playAgainMsBox;
 
 signals:
     void playAgain();

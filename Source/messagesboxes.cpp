@@ -7,8 +7,8 @@ MessagesBoxes::MessagesBoxes()
 
 void MessagesBoxes::showPlayAgainMsBox()
 {
-    QMessageBox playAgainMsBox;
-    playAgainMsBox.setWindowTitle("Game Over");
+//    QMessageBox playAgainMsBox;
+//    playAgainMsBox.setWindowTitle("Game Over");
     playAgainMsBox.setText("Do you want to play it again?");
     playAgainMsBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     playAgainMsBox.setDefaultButton(QMessageBox::No);
