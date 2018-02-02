@@ -49,6 +49,10 @@ void Interface::setMenuBar()
     connect(easyAction, &QAction::triggered, this, &Interface::easyMode);
     connect(mediumAction, &QAction::triggered, this, &Interface::mediumMode);
     connect(hardAction, &QAction::triggered, this, &Interface::hardMode);
+
+    QMenu *aboutMenu = new QMenu(basicLayout);
+    aboutMenu = menuBar()->addMenu("About");
+    connect(aboutMenu, &QMenu::aboutToShow, &setMsBox, &MessagesBoxes::about);
 }
 
 void Interface::startGame(int rows, int cols, int totalMines)

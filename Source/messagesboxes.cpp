@@ -29,3 +29,22 @@ void MessagesBoxes::showPlayAgainMsBox()
         break;
     }
 }
+
+void MessagesBoxes::about()
+{
+    QMessageBox aboutMsBox;
+    aboutMsBox.setWindowTitle("About");
+    aboutMsBox.setText("A Theodore Tang Production");
+    aboutMsBox.setInformativeText("© 2017");
+    aboutMsBox.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    aboutMsBox.setStyleSheet("QLabel{min-width: 300px; qproperty-alignment: 'AlignCenter';}");
+    int ret = aboutMsBox.exec();
+
+    switch (ret) {
+    case QMessageBox::Close:
+        aboutMsBox.close();
+    default:
+        break;
+    }
+}
+

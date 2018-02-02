@@ -13,6 +13,9 @@ public:
 
 signals:
     void playAgain();
+
+public slots:
+    void about();
 };
 
 #endif // MESSAGESBOXES_H
