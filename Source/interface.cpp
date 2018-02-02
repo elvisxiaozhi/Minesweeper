@@ -139,7 +139,7 @@ void Interface::markFlag()
                     Btns[i]->setIcon(QIcon());
                 }
                 else {
-                    Btns[i]->setIcon(QIcon("://flag.ico"));
+                    Btns[i]->setIcon(QIcon(":/flag.png"));
                     Btns[i]->setIconSize(QSize(40, 40));
                     flagsPos.push_back(i);
                 }
@@ -453,7 +453,7 @@ void Interface::recoverMarkedBtns()
 {
     if(flagsPos.size() > 0) {
         for(int i = 0; i < flagsPos.size(); i++) {
-            Btns[flagsPos[i]]->setIcon(QIcon("://flag.ico"));
+            Btns[flagsPos[i]]->setIcon(QIcon(":/flag.png"));
             Btns[flagsPos[i]]->setIconSize(QSize(40, 40));
             Btns[flagsPos[i]]->show();
             Lbls.labels[flagsPos[i]]->hide();

@@ -1,10 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>flag.ico</file>
         <file>question_mark.png</file>
-        <file>mine.ico</file>
-        <file>timerLbl.ico</file>
         <file>correct_mark.png</file>
         <file>cross_mark.png</file>
+        <file>flag.png</file>
+        <file>mine.png</file>
     </qresource>
 </RCC>

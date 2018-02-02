@@ -6,7 +6,7 @@ Labels::Labels()
 
 void Labels::setMineIcon()
 {
-    QPixmap minePixmap(":/mine.ico");
+    QPixmap minePixmap(":/mine.png");
     int w, h;
     for(int i = 0; i < generatedMines.minesPos.size(); i++) {
         w = labels[generatedMines.minesPos[i]]->width();
