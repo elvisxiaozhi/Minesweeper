@@ -4,5 +4,7 @@
         <file>question_mark.png</file>
         <file>mine.ico</file>
         <file>timerLbl.ico</file>
+        <file>correct_mark.png</file>
+        <file>cross_mark.png</file>
     </qresource>
 </RCC>

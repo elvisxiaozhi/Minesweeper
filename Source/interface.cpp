@@ -158,17 +158,26 @@ void Interface::showLabel()
             else {
                 Btns[i]->hide();
                 Lbls.labels[i]->show();
-                if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), i) != Lbls.generatedMines.minesPos.end()) {
-                    Lbls.labels[i]->setStyleSheet("background-color: red");
-                    showAll();
+                if(isFirstLblMine(i) == true) {
+                    qDebug() << "Mine found in the first move";
+                    firstMove = i;
+                    qDebug() << "First move is at: " << firstMove;
+                    reGenerateMines();
                 }
-                else if(Lbls.labels[i]->pixmap() == 0) {
-                    QString clickedLblObjectName = Lbls.labels[i]->objectName();
-                    showTopBlankLbls(clickedLblObjectName);
-                    showBottomBlankLbls(clickedLblObjectName);
-                    showLeftBlankLbls(clickedLblObjectName);
-                    showRightBlankLbls(clickedLblObjectName);
-                    recoverMarkedBtns();
+                else {
+                    if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), i) != Lbls.generatedMines.minesPos.end()) {
+                        Lbls.labels[i]->setStyleSheet("background-color: red");
+                        markTrueOrFalse();
+                        showAll();
+                    }
+                    else if(Lbls.labels[i]->pixmap() == 0) {
+                        QString clickedLblObjectName = Lbls.labels[i]->objectName();
+                        showTopBlankLbls(clickedLblObjectName);
+                        showBottomBlankLbls(clickedLblObjectName);
+                        showLeftBlankLbls(clickedLblObjectName);
+                        showRightBlankLbls(clickedLblObjectName);
+                        recoverMarkedBtns();
+                    }
                 }
             }
         }
@@ -245,6 +254,82 @@ void Interface::checkWin()
                 emit gameWon();
                 qDebug() << "You won";
             }
+        }
+    }
+}
+
+bool Interface::isFirstLblMine(int pos)
+{
+    int openedLbls = 0;
+    for(int i = 0; i < Lbls.labels.size(); i++) {
+        if(Lbls.labels[i]->isVisible() == true) {
+            openedLbls++;
+        }
+    }
+    qDebug() << "Opened Lbls: " << openedLbls;
+    if(openedLbls == 1) {
+        if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), pos) != Lbls.generatedMines.minesPos.end()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Interface::reGenerateMines()
+{
+    flagsPos.clear();
+    questionMarkPos.clear();
+    for(int i = 0; i < Btns.size(); i++) {
+        delete Btns[i];
+        delete Lbls.labels[i];
+    }
+
+    setButtons(totalRows * totalCols, totalRows, totalCols);
+    setLabels(totalRows * totalCols, totalRows, totalCols);
+    Lbls.generatedMines.generateMines(Lbls.generatedMines.minesPos.size(), totalRows * totalCols);
+    while(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), firstMove) != Lbls.generatedMines.minesPos.end()) {
+        Lbls.generatedMines.generateMines(Lbls.generatedMines.minesPos.size(), totalRows * totalCols);
+    }
+    Lbls.setLblNotation(totalRows * totalCols, totalRows, totalCols);
+    Lbls.setMineIcon();
+    Lbls.setLblsStyleSheet(totalRows * totalCols);
+
+    Btns[firstMove]->hide();
+    Lbls.labels[firstMove]->show();
+    if(Lbls.labels[firstMove]->pixmap() == 0) {
+        QString clickedLblObjectName = Lbls.labels[firstMove]->objectName();
+        showTopBlankLbls(clickedLblObjectName);
+        showBottomBlankLbls(clickedLblObjectName);
+        showLeftBlankLbls(clickedLblObjectName);
+        showRightBlankLbls(clickedLblObjectName);
+        recoverMarkedBtns();
+    }
+}
+
+void Interface::markTrueOrFalse()
+{
+    QPixmap correctMark(":/correct_mark.png");
+    QPixmap crossMark(":/cross_mark.png");
+
+    int w, h;
+    w = Lbls.labels[0]->width();
+    h = Lbls.labels[0]->height();
+
+    for(int i = 0; i < flagsPos.size(); i++) {
+        if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), flagsPos[i]) != Lbls.generatedMines.minesPos.end()) {
+            Lbls.labels[flagsPos[i]]->setPixmap(correctMark.scaled(w, h, Qt::KeepAspectRatio));
+        }
+        else {
+            Lbls.labels[flagsPos[i]]->setPixmap(crossMark.scaled(w, h, Qt::KeepAspectRatio));
+        }
+    }
+
+    for(int i = 0; i < questionMarkPos.size(); i++) {
+        if(std::find(Lbls.generatedMines.minesPos.begin(), Lbls.generatedMines.minesPos.end(), questionMarkPos[i]) != Lbls.generatedMines.minesPos.end()) {
+            Lbls.labels[questionMarkPos[i]]->setPixmap(correctMark.scaled(w, h, Qt::KeepAspectRatio));
+        }
+        else {
+            Lbls.labels[questionMarkPos[i]]->setPixmap(crossMark.scaled(w, h, Qt::KeepAspectRatio));
         }
     }
 }

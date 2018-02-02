@@ -32,6 +32,7 @@ private:
     Timer setTimer;
     MessagesBoxes setMsBox;
     int totalRows, totalCols;
+    int firstMove;
 
     void setLayout();
     void setMenuBar();
@@ -48,6 +49,9 @@ private:
     void recoverMarkedBtns();
     void resetGame();
     void checkWin();
+    bool isFirstLblMine(int);
+    void reGenerateMines();
+    void markTrueOrFalse();
 
 signals:
     void flagMarked();
